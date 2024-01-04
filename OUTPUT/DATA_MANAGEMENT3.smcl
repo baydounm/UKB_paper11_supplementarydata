@@ -1,0 +1,767 @@
+{smcl}
+{com}{sf}{ul off}{txt}
+{com}. 
+. 
+. 
+. 
+. 
+. 
+. //STEP 15: MERGE DATASETS TOGETHER//
+. 
+. 
+. use "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM",clear
+{txt}
+{com}. sort n_eid
+{txt}
+{com}. capture drop _merge
+{txt}
+{com}. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. use "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\proteomic_olink_instance0fin",clear
+{txt}
+{com}. sort n_eid
+{txt}
+{com}. capture drop _merge
+{txt}
+{com}. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\proteomic_olink_instance0fin.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. use "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\withdrawals",clear
+{txt}
+{com}. sort n_eid
+{txt}
+{com}. capture drop _merge
+{txt}
+{com}. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\withdrawals.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. 
+. cd "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA"
+{res}E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA
+{txt}
+{com}. 
+. 
+. use "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\proteomic_olink_instance0fin",clear
+{txt}
+{com}. merge n_eid using withdrawals
+{txt}{p}
+(you are using old
+{bf:merge} syntax; see
+{bf:{help merge:[D] merge}} for new syntax)
+{p_end}
+
+{com}. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\proteomic_olink_instance0fin.dta{rm}
+saved
+{p_end}
+
+{com}. sort n_eid
+{txt}
+{com}. capture drop _merge
+{txt}
+{com}. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\proteomic_olink_instance0fin.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. use "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM", clear
+{txt}
+{com}. sort n_eid
+{txt}
+{com}. capture drop _merge
+{txt}
+{com}. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. merge n_eid using proteomic_olink_instance0fin
+{txt}{p}
+(you are using old
+{bf:merge} syntax; see
+{bf:{help merge:[D] merge}} for new syntax)
+{p_end}
+
+{com}. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}.  
+. 
+. 
+. //STEP 16: DETERMINE FINAL ANALYTIC SAMPLE SIZE/////
+. 
+. 
+. 
+. use "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM",clear
+{txt}
+{com}. 
+. 
+. **Sample 1, excluding withdrawals**
+. 
+. capture drop sample1
+{txt}
+{com}. gen sample1=.
+{txt}(502,409 missing values generated)
+
+{com}. replace sample1=1 if baselineage~=. & withdrew==.
+{txt}(502,268 real changes made)
+
+{com}. replace sample1=0 if sample1~=1
+{txt}(141 real changes made)
+
+{com}. 
+. tab sample1
+
+    {txt}sample1 {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}        141        0.03        0.03
+{txt}          1 {c |}{res}    502,268       99.97      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}    502,409      100.00
+{txt}
+{com}. 
+. **Sample 2: >=50 y**
+. 
+. capture drop sample2
+{txt}
+{com}. gen sample2=.
+{txt}(502,409 missing values generated)
+
+{com}. replace sample2=1 if baselineage>=50 & baselineage~=. & sample1==1
+{txt}(384,548 real changes made)
+
+{com}. replace sample2=0 if sample2~=1 & sample1==1
+{txt}(117,720 real changes made)
+
+{com}. 
+. tab sample2
+
+    {txt}sample2 {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}    117,720       23.44       23.44
+{txt}          1 {c |}{res}    384,548       76.56      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}    502,268      100.00
+{txt}
+{com}. 
+. **Sample 3: exclude those with missing LE8, INFECTIOUS BURDEN SCORES**
+. 
+. capture drop sample3
+{txt}
+{com}. gen sample3=.
+{txt}(502,409 missing values generated)
+
+{com}. replace sample3=1 if baselineage>=50 & baselineage~=. & LE8_TOTALSCORE~=. & LE8_LIFESTYLE~=. & LE8_BIOLOGICAL~=. & LE8_COMP1DIET~=. & LE8_COMP2PA~=. & LE8_COMP3NICOTINE~=. & LE8_COMP4SLEEP~=. & LE8_COMP5BMI~=. & LE8_COMP6LIPIDS~=. & LE8_COMP7GLUC~=. & LE8_COMP8BP~=. & householdsize~=. &SES~=. & ethnicity2~=. & AD_PGS~=. ~=. & sample2==1
+{txt}(270,579 real changes made)
+
+{com}. replace sample3=0 if sample3~=1 & sample2==1
+{txt}(113,969 real changes made)
+
+{com}. 
+. tab sample3
+
+    {txt}sample3 {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}    113,969       29.64       29.64
+{txt}          1 {c |}{res}    270,579       70.36      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}    384,548      100.00
+{txt}
+{com}. 
+. 
+. 
+. **Sample 4: exclude those with missing olink proteomic**
+. 
+. capture drop sample4
+{txt}
+{com}. gen sample4=.
+{txt}(502,409 missing values generated)
+
+{com}. replace sample4=1 if sample3==1 & olink==1 
+{txt}(29,010 real changes made)
+
+{com}. replace sample4=0 if sample4~=1 & sample3==1
+{txt}(241,569 real changes made)
+
+{com}. 
+. tab sample4
+
+    {txt}sample4 {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}    241,569       89.28       89.28
+{txt}          1 {c |}{res}     29,010       10.72      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}    270,579      100.00
+{txt}
+{com}. 
+. **Sample 5: final sample: exclude prevalent dementia cases and incident dementia cases within a year**
+. 
+. stset Age_dementia, failure(dem_diag==1) enter(baselineage) id(n_eid) scale(1)
+
+{txt}Survival-time data settings
+
+{col 12}ID variable: {res}n_eid
+{col 10}{txt}Failure event: {res}dem_diag==1
+{col 1}{txt}Observed time interval: {res}(Age_dementia[_n-1], Age_dementia]
+{col 6}{txt}Enter on or after: {res}time baselineage
+{col 6}{txt}Exit on or before: {res}failure
+
+{txt}{hline 74}
+{res}    502,409{txt}  total observations
+{res}         23{txt}  event time missing (Age_dementia>=.){col 61}PROBABLE ERROR
+{res}        228{txt}  observations end on or before {bf:enter()}
+{hline 74}
+{res}    502,158{txt}  observations remaining, representing
+{res}    502,158{txt}  subjects
+{res}      7,668{txt}  failures in single-failure-per-subject data
+{res}  6,208,727{txt}  total analysis time at risk and under observation
+                                                At risk from t = {res}        0
+                                     {txt}Earliest observed entry t = {res} 37.41821
+                                          {txt}Last observed exit t = {res} 87.63313
+{txt}
+{com}. 
+. 
+. capture drop sample5
+{txt}
+{com}. gen sample5=.
+{txt}(502,409 missing values generated)
+
+{com}. replace sample5=1 if (sample4==1 & priordem==0 & _t~=.) | (sample4==1 & time01_1Ayears>1 & time01_1Ayears~=. & dem_diag==1 & _t~=.)
+{txt}(28,974 real changes made)
+
+{com}. replace sample5=0 if sample5~=1 & sample4==1
+{txt}(36 real changes made)
+
+{com}. 
+. 
+. 
+. capture drop sample_final
+{txt}
+{com}. gen sample_final=sample5
+{txt}(473,399 missing values generated)
+
+{com}. 
+. tab sample_final
+
+{txt}sample_fina {c |}
+          l {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}         36        0.12        0.12
+{txt}          1 {c |}{res}     28,974       99.88      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     29,010      100.00
+{txt}
+{com}. 
+. stset Age_dementia if sample_final==1, failure(dem_diag==1) enter(baselineage) id(n_eid) scale(1)
+
+{txt}Survival-time data settings
+
+{col 12}ID variable: {res}n_eid
+{col 10}{txt}Failure event: {res}dem_diag==1
+{col 1}{txt}Observed time interval: {res}(Age_dementia[_n-1], Age_dementia]
+{col 6}{txt}Enter on or after: {res}time baselineage
+{col 6}{txt}Exit on or before: {res}failure
+{col 7}{txt}Keep observations 
+{col 17}{help j_st_ifvsoptif:{bf:if} {it:exp}}: {res}sample_final==1
+
+{txt}{hline 74}
+{res}    502,409{txt}  total observations
+{res}    473,435{txt}  ignored at outset because of {bf:if} {it:exp}
+{hline 74}
+{res}     28,974{txt}  observations remaining, representing
+{res}     28,974{txt}  subjects
+{res}        786{txt}  failures in single-failure-per-subject data
+{res} 351,447.79{txt}  total analysis time at risk and under observation
+                                                At risk from t = {res}        0
+                                     {txt}Earliest observed entry t = {res} 50.00137
+                                          {txt}Last observed exit t = {res} 84.54757
+{txt}
+{com}. stdescribe if sample_final==1
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 36}{c LT}{hline 14} Per subject {hline 14}{c RT}
+Category{col 28}Total{col 41}Mean{col 54}Min{col 62}Median{col 76}Max
+{hline 78}
+Number of subjects    {res}     28974   
+{txt}Number of records     {res}     28974           1           1          1          1
+
+{txt}Entry time (first)                 {res} 60.67986    50.00137   61.14579   70.98973
+{txt}Exit time (final)                  {res} 72.80962    51.18686   73.21287   84.54757
+
+{txt}Subjects with gap     {res}         0   
+{txt}Time on gap           {res}         0           .           .          .          .
+{txt}Time at risk          {res} 351447.79    12.12976    .0301132    12.5284   14.54073
+
+{txt}Failures              {res}       786    .0271278           0          0          1
+{txt}{hline 78}
+
+{com}. 
+. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. //STEP 17: stset for dementia and AD incidence and estimate median age and percentiles, plus incidence rates across sex and racial groups//
+. 
+. use "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM",clear
+{txt}
+{com}. 
+. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. **************RACE_ETHN****************************
+. capture drop RACE_ETHN
+{txt}
+{com}. gen RACE_ETHN=ethnicity2
+{txt}
+{com}. 
+. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. *************stsum code******************************
+. 
+. 
+. **AD INCIDENCE**
+. 
+. stset Age_AD, failure(ad_diag==1) enter(baselineage) id(n_eid) scale(1)
+
+{txt}Survival-time data settings
+
+{col 12}ID variable: {res}n_eid
+{col 10}{txt}Failure event: {res}ad_diag==1
+{col 1}{txt}Observed time interval: {res}(Age_AD[_n-1], Age_AD]
+{col 6}{txt}Enter on or after: {res}time baselineage
+{col 6}{txt}Exit on or before: {res}failure
+
+{txt}{hline 74}
+{res}    502,409{txt}  total observations
+{res}         23{txt}  event time missing (Age_AD>=.){col 61}PROBABLE ERROR
+{res}         18{txt}  observations end on or before {bf:enter()}
+{hline 74}
+{res}    502,368{txt}  observations remaining, representing
+{res}    502,368{txt}  subjects
+{res}      3,272{txt}  failures in single-failure-per-subject data
+{res}  6,221,064{txt}  total analysis time at risk and under observation
+                                                At risk from t = {res}        0
+                                     {txt}Earliest observed entry t = {res} 37.41821
+                                          {txt}Last observed exit t = {res} 87.63313
+{txt}
+{com}. 
+. stsum if sample_final==1
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 352,489.513    .001027{col 40}    28974          .         .         .
+{txt}
+{com}. stsum if sample_final==1  & RACE_ETHN==0
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 337,178.679   .0010291{col 40}    27699          .         .         .
+{txt}
+{com}. stsum if sample_final==1  & RACE_ETHN==1 | RACE_ETHN==2 | RACE_ETHN==3
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 269,580.718   .0003561{col 40}    22092          .         .         .
+{txt}
+{com}. stsum if sample_final==1 & sex==1
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 165,008.926   .0010969{col 40}    13759          .         .         .
+{txt}
+{com}. stsum if sample_final==1 & sex==2
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 187,480.587   .0009654{col 40}    15215   84.23819         .         .
+{txt}
+{com}. 
+. stptime if sample_final==1
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 352489.51{col 29}     362{col 39} .00102698{col 51} .0009265{col 63} .0011384
+{txt}
+{com}. stptime if sample_final==1  & RACE_ETHN==0
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 337178.68{col 29}     347{col 39} .00102913{col 51} .0009263{col 63} .0011433
+{txt}
+{com}. stptime if sample_final==1  & RACE_ETHN==1 | RACE_ETHN==2 | RACE_ETHN==3
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 269580.72{col 29}      96{col 39} .00035611{col 51} .0002915{col 63}  .000435
+{txt}
+{com}. 
+. stptime if sample_final==1 & sex==1
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 165008.93{col 29}     181{col 39} .00109691{col 51} .0009482{col 63} .0012689
+{txt}
+{com}. stptime if sample_final==1 & sex==2
+
+{col 10}{txt}Failure {bf:_d}: {res}ad_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_AD
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 187480.59{col 29}     181{col 39} .00096543{col 51} .0008346{col 63} .0011168
+{txt}
+{com}. 
+. 
+. 
+. **DEMENTIA INCIDENCE**
+. 
+. stset Age_dementia, failure(dem_diag==1) enter(baselineage) id(n_eid) scale(1)
+
+{txt}Survival-time data settings
+
+{col 12}ID variable: {res}n_eid
+{col 10}{txt}Failure event: {res}dem_diag==1
+{col 1}{txt}Observed time interval: {res}(Age_dementia[_n-1], Age_dementia]
+{col 6}{txt}Enter on or after: {res}time baselineage
+{col 6}{txt}Exit on or before: {res}failure
+
+{txt}{hline 74}
+{res}    502,409{txt}  total observations
+{res}         23{txt}  event time missing (Age_dementia>=.){col 61}PROBABLE ERROR
+{res}        228{txt}  observations end on or before {bf:enter()}
+{hline 74}
+{res}    502,158{txt}  observations remaining, representing
+{res}    502,158{txt}  subjects
+{res}      7,668{txt}  failures in single-failure-per-subject data
+{res}  6,208,727{txt}  total analysis time at risk and under observation
+                                                At risk from t = {res}        0
+                                     {txt}Earliest observed entry t = {res} 37.41821
+                                          {txt}Last observed exit t = {res} 87.63313
+{txt}
+{com}. 
+. 
+. stsum if sample_final==1
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 351,447.785   .0022365{col 40}    28974          .         .         .
+{txt}
+{com}. stsum if sample_final==1  & RACE_ETHN==0
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 336,185.086   .0022577{col 40}    27699          .         .         .
+{txt}
+{com}. stsum if sample_final==1  & RACE_ETHN==1 | RACE_ETHN==2 | RACE_ETHN==3
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 269,025.175   .0009218{col 40}    22081          .         .         .
+{txt}
+{com}. stsum if sample_final==1 & sex==1
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 164,386.051   .0026888{col 40}    13759          .         .         .
+{txt}
+{com}. stsum if sample_final==1 & sex==2
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}{col 10}{c |}{col 26}Incidence{col 40}Number of{col 52}{c LT}{hline 6} Survival time {hline 5}{c RT}
+        {col 10}{c |} Time at risk{col 31}rate{col 41}subjects{col 57}25%{col 67}50%{col 77}75%
+{hline 9}{c +}{hline 69}
+   Total {c |} {res} 187,061.734    .001839{col 40}    15215   84.23819         .         .
+{txt}
+{com}. 
+. stptime if sample_final==1
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 351447.79{col 29}     786{col 39} .00223646{col 51} .0020855{col 63} .0023984
+{txt}
+{com}. stptime if sample_final==1  & RACE_ETHN==0
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 336185.09{col 29}     759{col 39} .00225768{col 51} .0021026{col 63} .0024242
+{txt}
+{com}. stptime if sample_final==1  & RACE_ETHN==1 | RACE_ETHN==2 | RACE_ETHN==3
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 269025.18{col 29}     248{col 39} .00092185{col 51}  .000814{col 63}  .001044
+{txt}
+{com}. 
+. stptime if sample_final==1 & sex==1
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 164386.05{col 29}     442{col 39} .00268879{col 51} .0024495{col 63} .0029515
+{txt}
+{com}. stptime if sample_final==1 & sex==2
+
+{col 10}{txt}Failure {bf:_d}: {res}dem_diag==1
+{col 4}{txt}Analysis time {bf:_t}: {res}Age_dementia
+{col 3}{txt}Enter on or after: {res}time baselineage
+{col 9}{txt}ID variable: {res}n_eid
+
+{txt}Estimated person-time and incidence rate
+
+    Cohort{col 12}{c |}{col 15}Person-time{col 29}Failures{col 45}Rate{col 52}[95% conf. interval]
+{hline 11}{c +}{hline 59}
+     Total{col 12}{c |}{col 16}{res} 187061.73{col 29}     344{col 39} .00183897{col 51} .0016545{col 63} .0020439
+{txt}
+{com}. 
+. capture drop NoneWhite
+{txt}
+{com}. gen NoneWhite=.
+{txt}(502,409 missing values generated)
+
+{com}. replace NoneWhite=1 if RACE_ETHN==1 | RACE_ETHN==2 | RACE_ETHN==3
+{txt}(29,818 real changes made)
+
+{com}. replace NoneWhite=0 if RACE_ETHN==0
+{txt}(472,591 real changes made)
+
+{com}. 
+. 
+. 
+. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. 
+. 
+. //STEP 18: DETERMINE DIFFERENCES IN FINAL ANALYTIC SAMPLE VS. EXCLUDED SAMPLE BY BASIC SOCIO-DEMOGRAPHICS//
+. 
+. logistic sample_final baselineage sex RACE_ETHN if baselineage>=50 & baselineage~=.
+{txt}note: {bf:RACE_ETHN} != 0 predicts success perfectly;
+      {bf:RACE_ETHN} omitted and 1275 obs not used.
+
+{res}
+{txt}{col 1}Logistic regression{col 57}{lalign 13:Number of obs}{col 70} = {res}{ralign 6:27,735}
+{txt}{col 57}{lalign 13:LR chi2({res:2})}{col 70} = {res}{ralign 6:15.15}
+{txt}{col 57}{lalign 13:Prob > chi2}{col 70} = {res}{ralign 6:0.0005}
+{txt}{col 1}{lalign 14:Log likelihood}{col 15} = {res}{ralign 10:-267.69153}{txt}{col 57}{lalign 13:Pseudo R2}{col 70} = {res}{ralign 6:0.0275}
+
+{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 1}sample_final{col 14}{c |} Odds ratio{col 26}   Std. err.{col 38}      z{col 46}   P>|z|{col 54}     [95% con{col 67}f. interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 1}baselineage {c |}{col 14}{res}{space 2} .8772543{col 26}{space 2} .0319827{col 37}{space 1}   -3.59{col 46}{space 3}0.000{col 54}{space 4} .8167566{col 67}{space 3} .9422332
+{txt}{space 9}sex {c |}{col 14}{res}{space 2} 1.019892{col 26}{space 2} .3408659{col 37}{space 1}    0.06{col 46}{space 3}0.953{col 54}{space 4} .5297462{col 67}{space 3} 1.963545
+{txt}{space 3}RACE_ETHN {c |}{col 14}{res}{space 2}        1{col 26}{txt}  (omitted)
+{space 7}_cons {c |}{col 14}{res}{space 2}  2706163{col 26}{space 2}  6568665{col 37}{space 1}    6.10{col 46}{space 3}0.000{col 54}{space 4} 23239.89{col 67}{space 3} 3.15e+08
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{p 0 6 2}Note: {bf:_cons} estimates baseline odds{txt}.{p_end}
+
+{com}. 
+. 
+. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. //STEP 19: CREATE LE8 TOTAL SCORE TERTILES////
+. 
+. ***********************LE8 TOTAL SCORE TERTILES*********************
+. 
+. use "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM",clear
+{txt}
+{com}. 
+. capture drop LE8_TOTALSCOREtert
+{txt}
+{com}. xtile LE8_TOTALSCOREtert=LE8_TOTALSCORE if sample_final==1, nq(3)
+{txt}
+{com}. 
+. 
+. 
+. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. capture log close
+{smcl}
+{com}{sf}{ul off}

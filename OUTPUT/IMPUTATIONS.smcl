@@ -1,0 +1,218 @@
+{smcl}
+{com}{sf}{ul off}{txt}
+{com}. 
+. 
+. //STEP 20: NO NEED FOR MULTIPLE IMPUTATIONS///
+. 
+. 
+. use "E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM",clear
+{txt}
+{com}. 
+. capture drop AGE
+{txt}
+{com}. gen AGE=baselineage
+{txt}(23 missing values generated)
+
+{com}. 
+. capture drop SEX
+{txt}
+{com}. gen SEX=sex
+{txt}(20 missing values generated)
+
+{com}. 
+. save, replace
+{txt}{p 0 4 2}
+file {bf}
+E:\16GBBACKUPUSB\BACKUP_USB_SEPTEMBER2014\May Baydoun_folder\UK_BIOBANK_PROJECT\UKB_PAPER8D_LE8PROTDEM\DATA\UKB_PAPER8D_LE8PROTDEM.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. save finaldata_unimputed, replace
+{txt}{p 0 4 2}
+file {bf}
+finaldata_unimputed.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. sort n_eid 
+{txt}
+{com}. 
+. save, replace
+{txt}{p 0 4 2}
+file {bf}
+finaldata_unimputed.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. set matsize 11000
+{txt}{bf:set matsize} ignored.
+{p 4 4 2}
+Matrix sizes are no longer limited by
+{bf:c(matsize)} in modern Statas.
+Matrix sizes are now limited by edition of Stata.
+See {help limits} for more details.
+{p_end}
+
+{com}. 
+. 
+. stset Age_dementia, failure(dem_diag==1) enter(baselineage) id(n_eid) scale(1)
+
+{txt}Survival-time data settings
+
+{col 12}ID variable: {res}n_eid
+{col 10}{txt}Failure event: {res}dem_diag==1
+{col 1}{txt}Observed time interval: {res}(Age_dementia[_n-1], Age_dementia]
+{col 6}{txt}Enter on or after: {res}time baselineage
+{col 6}{txt}Exit on or before: {res}failure
+
+{txt}{hline 74}
+{res}    502,409{txt}  total observations
+{res}         23{txt}  event time missing (Age_dementia>=.){col 61}PROBABLE ERROR
+{res}        228{txt}  observations end on or before {bf:enter()}
+{hline 74}
+{res}    502,158{txt}  observations remaining, representing
+{res}    502,158{txt}  subjects
+{res}      7,668{txt}  failures in single-failure-per-subject data
+{res}  6,208,727{txt}  total analysis time at risk and under observation
+                                                At risk from t = {res}        0
+                                     {txt}Earliest observed entry t = {res} 37.41821
+                                          {txt}Last observed exit t = {res} 87.63313
+{txt}
+{com}. 
+. **List of exogenous variables:
+. **RACE_ETHN AGE SEX centre householdsize NonWhite
+. 
+. **List of mediator variables:
+. 
+. **SES: educationbr townsend householdincome
+. **SMOKING: smoking etsmoke packyearssmoke
+. **ALCOHOL: alcohol
+. **PA: METmin
+. **DIET: HDI_TOTALSCORE DIET_VARIATION 
+. **NUTR: vitamind rdw
+. **SS: SS_friendsfamily SS_leisuresocial SS_abilityconfide
+. **HEALTH: comorbid bmi srh allostatic
+. **AD/DEMENTIA: Age_dementia Age_AD
+. **Age to AD and dementia: Age_dementia Age_AD
+. **Proteomic data: aarsd1-zbtb17 
+. **Selection variables: onlink withdrew sample*
+. 
+. 
+. keep n_eid AGE baselineage Age SEX RACE_ETHN  AD_PGS educationbr  smoking etsmoke townsend householdincome packyearssmoke alcohol HDI_TOTALSCORE SS_friendsfamily SS_leisuresocial SS_abilityconfide srhbr allostatic METmin vitamind rdw comorbid bmi  oralhealth* poororalhealth*  LE8* POORCOGN householdsize Age_dementia dem_diag Age_AD ad_diag aarsd1-zbtb17 olink withdrew sample* time* priordem  
+{err}variable oralhealth* not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "C:\Users\baydounm\AppData\Local\Temp\STD27b8_000000.tmp"
+{txt}
+{com}. 
+. keep n_eid AGE baselineage Age SEX RACE_ETHN  AD_PGS educationbr  smoking etsmoke townsend householdincome packyearssmoke alcohol HDI_TOTALSCORE SS_friendsfamily SS_leisuresocial SS_abilityconfide srhbr allostatic METmin vitamind rdw comorbid bmi  LE8* POORCOGN householdsize Age_dementia dem_diag Age_AD ad_diag aarsd1-zbtb17 olink withdrew sample* time* priordem  
+{txt}
+{com}. 
+. keep if sample_final==1
+{txt}(473,435 observations deleted)
+
+{com}. 
+. save finaldata_unimputedfin, replace
+{txt}{p 0 4 2}
+file {bf}
+finaldata_unimputedfin.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. 
+. use finaldata_unimputedfin,clear
+{txt}
+{com}. 
+. **TERTILE OF AD PGS**
+. capture drop AD_PGStert
+{txt}
+{com}. xtile AD_PGStert=AD_PGS if sample_final==1, nq(3)
+{txt}
+{com}. 
+. 
+. **TERTILE OF LE8 TOTAL SCORE**********************************************
+. 
+. 
+. capture drop LE8_TOTALSCOREtert
+{txt}
+{com}. xtile LE8_TOTALSCOREtert=LE8_TOTALSCORE if sample_final==1, nq(3)
+{txt}
+{com}. 
+. save, replace
+{txt}{p 0 4 2}
+file {bf}
+finaldata_unimputedfin.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. **SES: educationbr, householdincome, townsend
+. 
+. capture drop zeducationbr 
+{txt}
+{com}. egen zeducationbr=std(educationbr)
+{txt}(4,932 missing values generated)
+
+{com}. 
+. capture drop zhouseholdincome 
+{txt}
+{com}. egen zhouseholdincome=std(householdincome)
+{txt}(3,009 missing values generated)
+
+{com}. 
+. capture drop ztownsend
+{txt}
+{com}. egen ztownsend=std(townsend)
+{txt}(25 missing values generated)
+
+{com}. 
+. capture drop ztownsendinv
+{txt}
+{com}. gen ztownsendinv=ztownsend*-1
+{txt}(25 missing values generated)
+
+{com}. 
+. capture drop rowmissSES
+{txt}
+{com}. egen rowmissSES=rowmiss(zeducationbr zhouseholdincome ztownsendinv)
+{txt}
+{com}. 
+. tab rowmissSES
+
+ {txt}rowmissSES {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          0 {c |}{res}     21,008       72.51       72.51
+{txt}          1 {c |}{res}      7,966       27.49      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}     28,974      100.00
+{txt}
+{com}. 
+. capture drop SES
+{txt}
+{com}. egen SES=rowmean(zeducationbr zhouseholdincome ztownsendinv) if rowmissSES<=1
+{txt}
+{com}. 
+. 
+. save, replace  
+{txt}{p 0 4 2}
+file {bf}
+finaldata_unimputedfin.dta{rm}
+saved
+{p_end}
+
+{com}. 
+. 
+. **************************************************************STEP 22: MAIN PART OF THE ANALYSIS: *************************
+. capture log close
+{smcl}
+{com}{sf}{ul off}
